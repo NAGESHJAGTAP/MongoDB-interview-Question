@@ -344,3 +344,154 @@ Student.find().populate("course_ids").exec((err, students) => {
 ```
 
 ---
+
+
+
+# SECTION C: Aggregation Framework in MongoDB
+
+This section explains how to use MongoDB's powerful Aggregation Framework to analyze and transform data.
+
+---
+
+## 1. Use `$group` to Count How Many Students Are in Each Course
+
+```js
+db.students.aggregate([
+  { $unwind: "$course_ids" },
+  {
+    $group: {
+      _id: "$course_ids",
+      studentCount: { $sum: 1 }
+    }
+  }
+])
+```
+
+---
+
+## 2. Use `$avg` to Calculate the Average Marks of Students
+
+```js
+db.students.aggregate([
+  {
+    $group: {
+      _id: null,
+      averageMarks: { $avg: "$marks" }
+    }
+  }
+])
+```
+
+---
+
+## 3. Use `$sum` to Find Total Marks Scored Per Course
+
+```js
+db.students.aggregate([
+  { $unwind: "$courses" },
+  {
+    $group: {
+      _id: "$courses.name",
+      totalMarks: { $sum: "$courses.marks" }
+    }
+  }
+])
+```
+
+---
+
+## 4. Use `$match` to Filter Documents Before Aggregation
+
+```js
+db.students.aggregate([
+  { $match: { age: { $gte: 18 } } },
+  {
+    $group: {
+      _id: "$age",
+      count: { $sum: 1 }
+    }
+  }
+])
+```
+
+---
+
+## 5. Use `$sort` to Sort Results of an Aggregation
+
+```js
+db.students.aggregate([
+  {
+    $group: {
+      _id: "$age",
+      count: { $sum: 1 }
+    }
+  },
+  { $sort: { count: -1 } }
+])
+```
+
+---
+
+## 6. Use `$project` to Reshape Documents in Aggregation
+
+```js
+db.students.aggregate([
+  {
+    $project: {
+      _id: 0,
+      name: 1,
+      age: 1,
+      "firstCourse": { $arrayElemAt: ["$courses", 0] }
+    }
+  }
+])
+```
+
+---
+
+## 7. Use `$limit` and `$skip` Inside an Aggregation Pipeline
+
+```js
+db.students.aggregate([
+  { $sort: { name: 1 } },
+  { $skip: 5 },
+  { $limit: 5 }
+])
+```
+
+---
+
+## 8. Use `$lookup` to Perform a Join Between Students and Courses
+
+```js
+db.students.aggregate([
+  {
+    $lookup: {
+      from: "courses",
+      localField: "course_ids",
+      foreignField: "_id",
+      as: "enrolled_courses"
+    }
+  }
+])
+```
+
+---
+
+## 9. Use `$unwind` to Flatten an Array Field During Aggregation
+
+```js
+db.students.aggregate([
+  { $unwind: "$courses" },
+  {
+    $project: {
+      name: 1,
+      courseName: "$courses.name",
+      marks: "$courses.marks"
+    }
+  }
+])
+```
+
+---
+
