@@ -90,7 +90,7 @@ Before using this repository, it helps to have:
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/your-username/mongodb-practice.git
+   git clone https://github.com/NAGESHJAGTAP/MongoDB-interview-Question.git
    ```
 2. Open `README.md` and practice each command in:
    - Mongo Shell (`mongosh`)
