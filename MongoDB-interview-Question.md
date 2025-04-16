@@ -495,3 +495,98 @@ db.students.aggregate([
 
 ---
 
+
+
+# SECTION D: Indexing and Performance in MongoDB
+
+This section provides MongoDB commands to create different types of indexes and improve performance.
+
+---
+
+## 1. Create a Single-Field Index on `email`
+
+```js
+db.students.createIndex({ email: 1 })
+```
+
+---
+
+## 2. Create a Compound Index on `course` and `age`
+
+```js
+db.students.createIndex({ course: 1, age: 1 })
+```
+
+---
+
+## 3. Create a Unique Index on `rollNo`
+
+```js
+db.students.createIndex({ rollNo: 1 }, { unique: true })
+```
+
+---
+
+## 4. Create a Descending Index on `createdAt`
+
+```js
+db.students.createIndex({ createdAt: -1 })
+```
+
+---
+
+## 5. Create a Partial Index on `status = "active"`
+
+```js
+db.students.createIndex(
+  { status: 1 },
+  { partialFilterExpression: { status: "active" } }
+)
+```
+
+---
+
+## 6. Create a TTL (Time To Live) Index on `createdAt` That Expires After 1 Hour
+
+```js
+db.students.createIndex(
+  { createdAt: 1 },
+  { expireAfterSeconds: 3600 }
+)
+```
+
+---
+
+## 7. Use `.explain()` to Analyze a Query’s Performance
+
+```js
+db.students.find({ email: "test@example.com" }).explain("executionStats")
+```
+
+---
+
+## 8. View All Indexes in a Collection
+
+```js
+db.students.getIndexes()
+```
+
+---
+
+## 9. Drop a Specific Index
+
+```js
+db.students.dropIndex("email_1")
+```
+
+---
+
+## 10. Drop All Indexes in a Collection
+
+```js
+db.students.dropIndexes()
+```
+
+---
+
+
